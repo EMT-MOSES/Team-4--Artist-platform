@@ -4,7 +4,6 @@ import Hero from './Hero';
 import Login from './Login';
 import Signup from './Signup';
 import ArtistDashboard from './ArtistDashboard';
-import FanDashboard from './FanDashboard';
 import VenueDashboard from './VenueDashboard';
 import Footer from './Footer';
 
@@ -67,8 +66,6 @@ export default function App() {
     content = <Signup />;
   } else if (route === 'artist-dashboard') {
     content = <ArtistDashboard />;
-  } else if (route === 'fan-dashboard') {
-    content = <FanDashboard />;
   } else if (route === 'venue-dashboard') {
     content = <VenueDashboard />;
   }

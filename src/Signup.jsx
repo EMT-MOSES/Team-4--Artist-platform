@@ -133,7 +133,6 @@ export default function Signup() {
             aria-label="Select your role"
           >
             <option value="Artist">Artist</option>
-            <option value="Fan">Fan</option>
             <option value="Venue">Venue</option>
           </select>
         </label>

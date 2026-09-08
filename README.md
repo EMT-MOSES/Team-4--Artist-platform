@@ -1,12 +1,12 @@
 # Artist Platform
 
-A React + Vite client-side demo platform for artists, venues, and fans.
+A React + Vite client-side demo platform for artists and venues.
 
 ## Overview
 This project models a lightweight music and event discovery experience where:
 - artists manage profiles and uploaded songs
 - venues manage profile information and booking requests
-- fans browse artists, venues, music, and platform stats
+- artists manage profiles, music, and platform stats
 
 ## Features
 - Homepage and marketing-style hero section
@@ -15,13 +15,11 @@ This project models a lightweight music and event discovery experience where:
 - Artist music CRUD using localStorage
 - Venue profile management
 - Booking workflow with localStorage persistence
-- Fan discovery for artists, venues, and music
 - Search, filters, and dashboard statistics
 
 ## User Roles
 - Artist
 - Venue
-- Fan
 
 ## Demo Accounts
 Use the seeded users from the local demo data source.
@@ -56,7 +54,6 @@ src/
   Signup.jsx
   ArtistDashboard.jsx
   VenueDashboard.jsx
-  FanDashboard.jsx
   index.css
 ```
 
