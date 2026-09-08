@@ -75,20 +75,20 @@ export default function VenueDashboard() {
           <article className="dashboard-card">
             <h3 className="dashboard-card-title">Dashboard</h3>
 
-            <div className="fan-stat-grid">
-              <div className="fan-stat-card">
+            <div className="dashboard-stat-grid">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Total Artists</p>
                 <h4 className="dashboard-stat-value">{totalArtists}</h4>
               </div>
-              <div className="fan-stat-card">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Active Bookings</p>
                 <h4 className="dashboard-stat-value">{activeBookings}</h4>
               </div>
-              <div className="fan-stat-card">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Upcoming Events</p>
                 <h4 className="dashboard-stat-value">{upcomingEvents}</h4>
               </div>
-              <div className="fan-stat-card">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Total Capacity</p>
                 <h4 className="dashboard-stat-value">{totalCapacity}</h4>
               </div>

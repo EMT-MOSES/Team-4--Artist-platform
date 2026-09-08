@@ -77,20 +77,20 @@ export default function ArtistDashboard() {
           <article className="dashboard-card">
             <h3 className="dashboard-card-title">Dashboard</h3>
 
-            <div className="fan-stat-grid">
-              <div className="fan-stat-card">
+            <div className="dashboard-stat-grid">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Total Songs</p>
                 <h4 className="dashboard-stat-value">{totalSongs}</h4>
               </div>
-              <div className="fan-stat-card">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Pending Bookings</p>
                 <h4 className="dashboard-stat-value">{pendingBookings}</h4>
               </div>
-              <div className="fan-stat-card">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Accepted Bookings</p>
                 <h4 className="dashboard-stat-value">{acceptedBookings}</h4>
               </div>
-              <div className="fan-stat-card">
+              <div className="dashboard-stat-card">
                 <p className="dashboard-label">Total Profile Views</p>
                 <h4 className="dashboard-stat-value">{Math.max(1, totalSongs + pendingBookings + acceptedBookings)}</h4>
               </div>

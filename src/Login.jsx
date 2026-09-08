@@ -72,7 +72,6 @@ export default function Login() {
 
       const routeByRole = {
         artist: '#/artist-dashboard',
-        fan: '#/fan-dashboard',
         venue: '#/venue-dashboard',
       };
 
