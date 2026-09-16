@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: Artist Platform API
+  description: API for retrieving campus events, venues, schedules, contacts, and creating lost-item reports.
+
+paths:
+  /events:
+    get:
+      summary: Retrieve a list of campus events
+      responses:
+        '200':
+          description: A list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /venues:
+    get:
+      summary: Retrieve a list of venues
+      responses:
+        '200':
+          description: A list of venues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Venue'
+
+  /schedules:
+    get:
+      summary: Retrieve a list of schedules
+      responses:
+        '200':
+          description: A list of schedules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+
+  /contacts:
+    get:
+      summary: Retrieve a list of contacts
+      responses:
+        '200':
+          description: A list of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+
+  /lost-items:
+    post:
+      summary: Create a lost-item report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LostItemReport'
+      responses:
+        '201':
+          description: Lost-item report created successfully
