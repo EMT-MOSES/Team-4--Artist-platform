@@ -6,6 +6,7 @@ import Signup from './Signup';
 import ArtistDashboard from './ArtistDashboard';
 import VenueDashboard from './VenueDashboard';
 import Footer from './Footer';
+import artistsTable from './ArtistsTable';
 
 const THEME_STORAGE_KEY = 'artist-platform-theme';
 
