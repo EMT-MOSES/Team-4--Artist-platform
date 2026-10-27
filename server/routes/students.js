@@ -1,21 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
-const db = require('../db');
+const { students } = require('../data/mockData');
 
 // GET all students
-router.get('/', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM students');
-
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
-      error: 'Failed to fetch students'
-    });
-  }
+router.get('/', (req, res) => {
+  res.json(students.map(({ id, name, email, course }) => ({ id, name, email, course })));
 });
 
 module.exports = router;

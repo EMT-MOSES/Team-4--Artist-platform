@@ -59,12 +59,14 @@ export default function Login() {
       if (!user) {
         setFeedback({
           type: 'error',
-          message: 'Invalid email or password. Please try again.',
+          message: 'Authentication failed.',
         });
         return;
       }
 
-      localStorage.setItem('currentUser', JSON.stringify(user));
+      const currentUser = { ...user };
+      delete currentUser.password;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
       setFeedback({
         type: 'success',
         message: `Welcome ${user.name}`,

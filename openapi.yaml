@@ -1,12 +1,19 @@
 openapi: 3.0.0
 info:
   title: Artist Platform API
-  description: API for retrieving campus events, venues, schedules, contacts, and creating lost-item reports.
-
+  description: >-
+    API for campus events, venues, schedules, contacts, student directory data,
+    and owner-specific lost-item reports. Each API key may make three
+    successful requests to each endpoint per hour.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+security:
+  - ApiKeyAuth: []
 paths:
-  /events:
+  /api/events:
     get:
-      summary: Retrieve a list of campus events
+      summary: Retrieve campus events
       responses:
         '200':
           description: A list of events
@@ -16,10 +23,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Event'
-
-  /venues:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /api/venues:
     get:
-      summary: Retrieve a list of venues
+      summary: Retrieve campus venues and capacities
       responses:
         '200':
           description: A list of venues
@@ -29,10 +39,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Venue'
-
-  /schedules:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /api/schedules:
     get:
-      summary: Retrieve a list of schedules
+      summary: Retrieve artist schedules
       responses:
         '200':
           description: A list of schedules
@@ -42,29 +55,315 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Schedule'
-
-  /contacts:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /api/contacts:
     get:
-      summary: Retrieve a list of contacts
+      summary: Retrieve venue contact information
       responses:
         '200':
-          description: A list of contacts
+          description: A list of venue contacts
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contact'
-
-  /lost-items:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /api/students:
+    get:
+      summary: Retrieve student directory entries
+      responses:
+        '200':
+          description: A list of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /api/artisans:
+    get:
+      summary: Retrieve artisans from the supplied data API
+      responses:
+        '200':
+          description: A list of selected artisan fields
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artisan'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          description: The upstream API is unavailable or returned invalid data
+  /api/artists:
+    get:
+      summary: Retrieve artisans through the legacy artists path
+      responses:
+        '200':
+          description: A list of selected artisan fields
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artisan'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          description: The upstream API is unavailable or returned invalid data
+  /api/bookings:
+    get:
+      summary: Retrieve the authenticated user's bookings
+      responses:
+        '200':
+          description: A list of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          description: The upstream API is unavailable or returned invalid data
+  /api/users/{userId}/bookings/summary:
+    get:
+      summary: Summarize the authenticated user's booking data
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Booking totals derived from the user's upstream booking records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: The requested user does not match the authenticated user
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '502':
+          description: The upstream API is unavailable or returned invalid data
+  /api/users/{userId}/lost-items:
+    get:
+      summary: Retrieve lost-item reports owned by a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The authenticated user's reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LostItemReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: The requested user does not match the authenticated user
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /api/lost-items:
     post:
-      summary: Create a lost-item report
+      summary: Create a lost-item report for the authenticated user
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LostItemReport'
+              type: object
+              required: [itemName, eventId]
+              properties:
+                itemName:
+                  type: string
+                eventId:
+                  type: string
       responses:
         '201':
           description: Lost-item report created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LostItemReport'
+        '400':
+          description: Invalid report data or unknown event
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Three successful requests to this endpoint have already been made this hour
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        venueId:
+          type: string
+        startsAt:
+          type: string
+          format: date-time
+    Venue:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        capacity:
+          type: integer
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+        artistName:
+          type: string
+        eventId:
+          type: string
+        startsAt:
+          type: string
+          format: date-time
+    Contact:
+      type: object
+      properties:
+        venueId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        course:
+          type: string
+    Artisan:
+      type: object
+      required: [artistId, name]
+      properties:
+        artistId:
+          oneOf:
+            - type: string
+            - type: integer
+        name:
+          type: string
+        email:
+          type: string
+        genre:
+          type: string
+    Booking:
+      type: object
+      properties:
+        bookingId:
+          oneOf:
+            - type: string
+            - type: integer
+        artistId:
+          oneOf:
+            - type: string
+            - type: integer
+        venueId:
+          oneOf:
+            - type: string
+            - type: integer
+        status:
+          type: string
+        eventDate:
+          type: string
+          format: date-time
+        offeredFee:
+          type: number
+    BookingSummary:
+      type: object
+      properties:
+        total:
+          type: integer
+        pending:
+          type: integer
+        accepted:
+          type: integer
+        upcoming:
+          type: integer
+        offeredFees:
+          type: number
+    LostItemReport:
+      type: object
+      properties:
+        id:
+          type: string
+        itemName:
+          type: string
+        eventName:
+          type: string
+        venueName:
+          type: string
+        priority:
+          type: string
+          enum: [standard, high]
+        createdAt:
+          type: string
+          format: date-time
